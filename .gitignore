@@ -1,0 +1,25 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Cliente
+node_modules/
+dist/
+
+# Configuración local y credenciales
+.env
+.env.*
+!.env.example
+*.local
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

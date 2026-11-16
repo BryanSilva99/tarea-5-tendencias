@@ -1,0 +1,22 @@
+@baseUrl = http://127.0.0.1:8000
+
+### Comprobar la API
+GET {{baseUrl}}/health
+
+### Iniciar conversación (ejecutar antes de la siguiente petición)
+# @name nuevaConversacion
+POST {{baseUrl}}/chat
+Content-Type: application/json
+
+{
+  "mensaje": "Quiero hacer una rectificación."
+}
+
+### Continuar con el identificador recibido (VS Code REST Client)
+POST {{baseUrl}}/chat
+Content-Type: application/json
+
+{
+  "mensaje": "Quiero cambiarme de sección.",
+  "conversacion_id": "{{nuevaConversacion.response.body.$.conversacion_id}}"
+}
