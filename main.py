@@ -1,6 +1,8 @@
 from pathlib import Path
+from hashlib import sha256
 
 from ollama import Client
+from experimento import MODELO, MODELO_QWEN, MODELOS, Parametros, valor_razonamiento
 
 catalogo = Path(__file__).with_name("tramites_fisi.json").read_text(
     encoding="utf-8"
@@ -48,16 +50,32 @@ mensajes = [
 ]
 
 
-def responder(pregunta, historial):
+CATALOGO_SHA256 = sha256(catalogo.encode("utf-8")).hexdigest()
+SISTEMA_SHA256 = sha256(mensajes[0]["content"].encode("utf-8")).hexdigest()
+
+
+def generar_respuesta(pregunta, historial, modelo=MODELO, razonamiento=None, parametros=None):
+    """Devuelve la respuesta completa de Ollama, incluidas sus métricas."""
+    if modelo not in MODELOS:
+        raise ValueError("Modelo no permitido.")
+    pensar = valor_razonamiento(modelo, razonamiento)
+    # Reconstituye el mismo mensaje del sistema para cualquier modelo y turno.
+    historial[0] = mensajes[0].copy()
     historial.append({"role": "user", "content": pregunta})
     respuesta = cliente.chat(
-        model="gpt-oss:20b",
+        model=modelo,
         messages=historial,
         stream=False,
+        think=pensar,
+        options=(parametros or Parametros()).model_dump(),
     )
     texto = respuesta.message.content  # pylint: disable=no-member
     historial.append({"role": "assistant", "content": texto})
-    return texto
+    return respuesta
+
+
+def responder(pregunta, historial):
+    return generar_respuesta(pregunta, historial).message.content
 
 
 def main():

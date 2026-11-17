@@ -1,8 +1,12 @@
 # Tarea 5 Tendencias — Asistente FISI
 
-Aplicación de chat para consultar trámites de matrícula de la FISI. Incluye una interfaz web en React, una API HTTP con FastAPI y un asistente que ejecuta el modelo `gpt-oss:20b` localmente mediante Ollama.
+Aplicación de chat para consultar trámites de matrícula de la FISI. Incluye una interfaz web en React, una API HTTP con FastAPI y un asistente con dos modelos locales seleccionables mediante Ollama: `gpt-oss:20b` y `qwen3:4b-q4_K_M`.
 
-El asistente responde en español, conserva el contexto de cada conversación y utiliza como fuente el catálogo `tramites_fisi.json`. Actualmente el catálogo contiene la rectificación de matrícula y el caso de cambio de sección. No requiere una clave de API de OpenAI ni una base de datos.
+La prueba de concepto evalúa la viabilidad de un chatbot universitario con **un LLM local y una única base JSON, sin RAG**. GPT-OSS representa el escenario de equipo personal con aceleración GPU; Qwen3 es el candidato ligero para una futura infraestructura económica de la FISI. **Ambos se prueban inicialmente en la misma computadora personal**. Esto no valida un servidor institucional sin GPU ni su capacidad de concurrencia.
+
+El asistente responde en español, conserva el contexto de cada conversación y utiliza como única fuente el catálogo `tramites_fisi.json`. Ambos modelos reciben exactamente el mismo mensaje de sistema y catálogo; sus huellas SHA-256 quedan en los resultados. El catálogo incluye rectificación, matrícula extemporánea y anulación/reserva. No requiere una clave de API de OpenAI ni una base de datos.
+
+Consulta [EVALUACION.md](EVALUACION.md) para el protocolo, la rúbrica de calidad, la interpretación de recursos y los límites de las conclusiones.
 
 ## Contenido
 
@@ -14,13 +18,14 @@ El asistente responde en español, conserva el contexto de cada conversación y 
 - [Consumir la API](#consumir-la-api)
 - [Ejecutar por consola](#ejecutar-por-consola)
 - [Pruebas y compilación](#pruebas-y-compilación)
+- [Evaluación y exportación de evidencia](#evaluación-y-exportación-de-evidencia)
 - [Solución de problemas](#solución-de-problemas)
 - [Configuración y límites](#configuración-y-límites)
 
 ## Arquitectura y estructura
 
 ```text
-Navegador → React / Vite → FastAPI → Ollama → gpt-oss:20b
+Navegador → React / Vite → FastAPI → Ollama → gpt-oss:20b / qwen3:4b-q4_K_M
              :5173        :8000     :11434
 ```
 
@@ -37,6 +42,13 @@ El navegador envía solicitudes a `/api/chat` en el mismo origen del cliente. Vi
 ├── tramites_fisi.json         # Catálogo del asistente
 ├── solicitudes.http          # Peticiones para VS Code REST Client
 ├── test_api.py               # Pruebas con Ollama simulado
+├── experimento.py            # Modelos, razonamiento y parámetros compartidos
+├── telemetria.py              # CPU/RAM/GPU del equipo y residencia de Ollama
+├── evaluacion.py              # Referencias de evaluación resueltas desde el catálogo
+├── preguntas_evaluacion.json  # Preguntas y rúbricas; no es otra base de conocimiento
+├── evaluar.py                 # Ejecución secuencial reproducible por CLI
+├── evidencia.py               # Exportación JSON y CSV para CLI
+├── EVALUACION.md              # Protocolo y alcance de las conclusiones
 └── cliente/
     ├── package.json          # Dependencias y comandos del cliente
     ├── package-lock.json     # Versiones resueltas de Node
@@ -57,7 +69,7 @@ El navegador envía solicitudes a `/api/chat` en el mismo origen del cliente. Vi
 | uv | Para instalar Python y las dependencias del servidor |
 | Node.js y npm | Node 20 desde 20.19.0, o Node 22 desde 22.12.0 y versiones superiores compatibles con Vite |
 | Ollama | Instalado y disponible en `127.0.0.1:11434` |
-| Modelo | `gpt-oss:20b`, descargado mediante Ollama |
+| Modelos | `gpt-oss:20b` y `qwen3:4b-q4_K_M`, descargados mediante Ollama |
 
 Se necesita Internet para instalar herramientas, dependencias y descargar el modelo. La inferencia se realiza localmente. El modelo ocupa varios GB en disco y necesita memoria suficiente para cargarse; el tiempo de respuesta depende del equipo.
 
@@ -115,6 +127,7 @@ En otra terminal descarga el modelo y comprueba que está instalado:
 
 ```bash
 ollama pull gpt-oss:20b
+ollama pull qwen3:4b-q4_K_M
 ollama list
 ```
 
@@ -213,6 +226,14 @@ Ejemplos:
 
 El cliente conserva el identificador para los siguientes mensajes. Al recargar la página comienza otro chat. Si una solicitud falla, recupera el texto para que puedas reenviarlo.
 
+El selector **Modelo**, debajo de la cabecera, permite alternar entre **gpt-oss · 20B** y **Qwen3 · 4B · Q4_K_M**. Cambiar de modelo inicia una conversación nueva. El selector se bloquea mientras se obtiene una respuesta. El modelo predeterminado es `gpt-oss:20b`.
+
+La interfaz presenta solo el chat, el selector de modelo y las métricas por respuesta. Los controles de razonamiento, parámetros y evaluación están ocultos. La API aplica los valores predeterminados: razonamiento medio para GPT-OSS y **activado para Qwen3**. La configuración sigue registrándose con cada respuesta y puede ajustarse por API o CLI.
+
+Debajo de cada respuesta, **Rendimiento** muestra el tiempo de respuesta, la velocidad en tokens por segundo y los tokens generados. Pulsa esa fila para ver el modelo utilizado en ese turno, los tokens de entrada y los tiempos de carga, procesamiento de entrada y generación. El primer mensaje tras cambiar de modelo puede tardar más por la carga en memoria.
+
+Las duraciones de Ollama se convierten de nanosegundos a milisegundos. La velocidad se calcula como `eval_count / (eval_duration / 1 000 000 000)`. El tiempo de la API incluye la espera en cola y la consulta a Ollama, pero no la red del navegador. Los tokens de entrada incluyen instrucciones, catálogo e historial; los tokens generados son los que reporta Ollama y pueden incluir razonamiento interno. Los campos que Ollama omita aparecen como «No disponible». Estas métricas describen la ejecución, no la precisión de las respuestas.
+
 ## Consumir la API
 
 ### Endpoints
@@ -220,6 +241,9 @@ El cliente conserva el identificador para los siguientes mensajes. Al recargar l
 | Método | Ruta | Función |
 | --- | --- | --- |
 | GET | `/health` | Comprobar que FastAPI responde |
+| GET | `/modelo` | Consultar modelos y sus opciones de razonamiento sin cargarlos |
+| GET | `/experimento` | Consultar entorno, hardware, parámetros y copia del catálogo/sistema con sus huellas |
+| GET | `/evaluacion` | Consultar preguntas, criterios y referencias del mismo catálogo para revisión humana |
 | POST | `/chat` | Iniciar o continuar una conversación |
 | GET | `/docs` | Probar la API desde Swagger UI |
 | GET | `/openapi.json` | Consultar el esquema de la API |
@@ -237,7 +261,18 @@ Ejemplo de respuesta; el identificador y el texto generado pueden variar:
 ```json
 {
   "conversacion_id": "7646a444-00df-455a-a9e9-3efb0683cb34",
-  "respuesta": "¿Qué necesitas cambiar en tu matrícula?"
+  "respuesta": "¿Qué necesitas cambiar en tu matrícula?",
+  "modelo": "gpt-oss:20b",
+  "metricas": {
+    "tiempo_respuesta_ms": 3500.0,
+    "tiempo_modelo_ms": 3000.0,
+    "carga_modelo_ms": 200.0,
+    "procesamiento_prompt_ms": 800.0,
+    "generacion_ms": 2000.0,
+    "tokens_entrada": 1200,
+    "tokens_salida": 80,
+    "tokens_por_segundo": 40.0
+  }
 }
 ```
 
@@ -253,14 +288,19 @@ curl http://127.0.0.1:8000/chat \
 
 Omite `conversacion_id` para empezar un chat independiente. El mensaje debe ser texto y no puede estar vacío.
 
+Para elegir Qwen3, envía `"modelo": "qwen3:4b-q4_K_M"` en el cuerpo de `/chat`. Puedes añadir `"razonamiento": "activado"` o `"desactivado"` y `"parametros": {"temperature": 0.2, "seed": 42, "num_ctx": 8192, "num_predict": 1024}`. GPT-OSS acepta `low`, `medium` o `high`. La respuesta registra la configuración, fecha, identificador de evidencia, métricas, duraciones originales, recursos y huellas.
+
+Si omites configuración al iniciar, se usan los valores predeterminados; si la omites al continuar, se conserva la de la conversación. Solo se aceptan los dos modelos y razonamientos configurados. Cambiar la configuración de un mismo `conversacion_id` devuelve 409: empieza sin identificador para cambiarla.
+
 Los ejemplos multilínea usan Bash o Zsh. En Windows también puedes probar el JSON directamente en `/docs`, Postman o Insomnia. `solicitudes.http` incluye peticiones para la extensión REST Client de VS Code.
 
 ### Errores HTTP
 
 | Código | Significado | Acción |
 | --- | --- | --- |
-| 422 | Mensaje o UUID inválido | Revisar el JSON |
+| 422 | Mensaje, UUID o modelo inválido | Revisar el JSON y los modelos permitidos |
 | 404 | Conversación inexistente | Empezar sin `conversacion_id` |
+| 409 | Cambio de modelo dentro de una conversación | Empezar sin `conversacion_id` |
 | 503 | No se puede conectar con Ollama | Comprobar el puerto 11434 |
 | 504 | Tiempo de espera agotado | Revisar recursos del equipo y reintentar |
 | 502 | Ollama rechazó la consulta | Revisar el servicio, el modelo y los registros de la API |
@@ -285,7 +325,36 @@ Escribe tus preguntas después de `Estudiante:`. Usa `/salir` para terminar. Est
 uv run python -m unittest -v test_api.py
 ```
 
-Las seis pruebas simulan Ollama y verifican el historial, la separación de conversaciones, la validación, los errores y los endpoints de estado y documentación. No requieren cargar el modelo ni iniciar servicios.
+Las pruebas simulan Ollama y verifican el historial, la separación de conversaciones, la selección y conservación de configuración, el mensaje de sistema idéntico, los errores, los endpoints, la consola y las métricas. Para incluir los sensores ausentes y la exportación CSV:
+
+```bash
+uv run python -m unittest -v test_api.py test_telemetria.py test_evidencia.py
+```
+
+No requieren cargar los modelos ni iniciar servicios.
+
+Para comprobar los cálculos de comparación y la exportación del frontend, sin dependencias adicionales:
+
+```bash
+cd cliente
+npm test
+```
+
+## Evaluación y exportación de evidencia
+
+El panel de evaluación no se muestra en la interfaz simplificada. El banco y la exportación siguen disponibles por CLI contra la misma API. Cada caso empieza una conversación independiente; los turnos de contexto comparten su identificador. Los lotes son secuenciales. Desde la raíz:
+
+```bash
+uv run python evaluar.py --salida resultados/evaluacion.json
+```
+
+Se guardan JSON y CSV tras cada respuesta. Revisa las respuestas contra los criterios y fragmentos del catálogo y completa manualmente los puntajes, el revisor y la justificación en el JSON. Ejemplo con repeticiones y razonamiento explícito:
+
+```bash
+uv run python evaluar.py --repeticiones 3 --razonamiento-gpt low --razonamiento-qwen desactivado --salida resultados/comparacion.json
+```
+
+Usa `uv run python evaluar.py --help` para seleccionar casos, modelos, semilla, contexto, temperatura y límite de generación. Ninguna ejecución califica automáticamente la precisión ni prueba concurrencia.
 
 ### Compilar el cliente
 
@@ -343,7 +412,7 @@ Los historiales viven en memoria. Pulsa **Nueva conversación** o envía una pet
 
 ## Configuración y límites
 
-- **Modelo y dirección de Ollama:** definidos en `main.py`. Python apunta explícitamente a `http://127.0.0.1:11434`; el proyecto no lee un archivo `.env` para cambiarlo.
+- **Modelos y dirección de Ollama:** definidos en `main.py`. `MODELO` establece el predeterminado y `MODELOS` las opciones del selector. Python apunta explícitamente a `http://127.0.0.1:11434`; el proyecto no lee un archivo `.env` para cambiarlo. La consola usa el modelo predeterminado.
 - **Puertos y proxy:** definidos en `cliente/vite.config.js`. La configuración actual utiliza la misma máquina para los tres servicios.
 - **Catálogo:** `tramites_fisi.json` se carga al iniciar Python. Reinicia la API tras modificarlo. Se envía completo al asistente; no hay búsqueda web ni base vectorial.
 - **Alcance de los datos:** las respuestas dependen del catálogo incluido. Revisa sus datos y fuentes antes de usarlo para otro período académico.

@@ -1,3 +1,4 @@
+
 {
   "tramites": [
     {
@@ -49,6 +50,131 @@
         {
           "titulo": "Cronograma general de actividades académicas de pregrado 2026",
           "url": "https://sum2.unmsm.edu.pe/pregrado.htm"
+        }
+      ]
+    },
+    {
+      "id": "matricula_extemporanea",
+      "nombre": "Matrícula extemporánea",
+      "facultad": "FISI",
+      "nivel": "Pregrado",
+      "periodo": "2026-II",
+      "alcance": "Procedimiento de matrícula fuera del proceso regular, sujeto al cronograma académico y a las disposiciones de la facultad.",
+      "ejemplos_de_consulta": [
+        "No pude matricularme en la fecha regular, ¿qué puedo hacer?",
+        "¿Cómo solicito matrícula extemporánea?",
+        "¿Cuándo fue la matrícula extemporánea?",
+        "¿Qué formato necesito?",
+        "¿Puedo matricularme después de que terminó el plazo?",
+        "¿Puedo matricularme si no encuentro vacantes?"
+      ],
+      "requisitos": [
+        "Utilizar el formato de solicitud de matrícula extemporánea 2026-II publicado por el Vicedecanato Académico de la FISI."
+      ],
+      "condiciones": [
+        "El procedimiento se encuentra sujeto al cronograma académico aplicable.",
+        "La publicación del formato no implica aprobación automática de la solicitud.",
+        "La disponibilidad actual de vacantes no está especificada en el catálogo.",
+        "No se debe afirmar que existe una ampliación de plazo sin un comunicado oficial que la confirme."
+      ],
+      "pasos": [
+        "Consultar el comunicado del primer proceso de rectificación de matrícula y matrícula extemporánea 2026-II.",
+        "Descargar el formato de solicitud de matrícula extemporánea publicado por la FISI.",
+        "Completar el formato con los datos y la información solicitada.",
+        "Verificar el canal y los requisitos de presentación establecidos en las instrucciones oficiales.",
+        "Presentar la solicitud dentro del periodo correspondiente y consultar su resultado por los medios institucionales."
+      ],
+      "casos_especificos": {
+        "no_se_matriculo": "Si el estudiante no realizó su matrícula regular, puede consultar el procedimiento de matrícula extemporánea. No se debe garantizar que su solicitud será aceptada.",
+        "plazo_vencido": "El periodo del cronograma general de 2026-II terminó el 11 de septiembre de 2026. No se dispone de confirmación sobre un nuevo periodo vigente.",
+        "falta_de_vacantes": "El catálogo no contiene información actualizada sobre vacantes disponibles ni garantiza la asignación de una vacante.",
+        "requisitos_adicionales": "El comunicado confirma la existencia del formato de solicitud, pero el catálogo no dispone de una lista completa y verificada de todos los documentos adicionales.",
+        "canal": "El canal específico de presentación de la solicitud extemporánea no está confirmado en la información incorporada."
+      },
+      "canal_de_presentacion": null,
+      "plazo": "Según el cronograma general de pregrado UNMSM 2026-II, del 7 al 11 de septiembre de 2026. La FISI publicó un comunicado específico del primer proceso; verificar sus indicaciones para las fechas aplicables.",
+      "cronograma_general_unmsm": {
+        "proceso": "Rectificación de matrícula y matrícula extemporánea",
+        "inicio": "2026-09-07",
+        "fin": "2026-09-11",
+        "alcance": "Cronograma general de pregrado de la UNMSM; no confirma ampliaciones posteriores ni disponibilidad actual."
+      },
+      "fuentes": [
+        {
+          "titulo": "Primer proceso de rectificación de matrícula y matrícula extemporánea FISI 2026-II",
+          "url": "https://sistemas.unmsm.edu.pe/site/noticias/35-importante/1841-1er-proceso-de-rectificacion-de-matricula-y-matricula-extemporanea-2026-ii"
+        },
+        {
+          "titulo": "Cronograma general de actividades académicas de pregrado 2026",
+          "url": "https://sum2.unmsm.edu.pe/pregrado.htm"
+        }
+      ]
+    },
+    {
+      "id": "anulacion_reserva_matricula",
+      "nombre": "Anulación y reserva de matrícula",
+      "facultad": "FISI",
+      "nivel": "Pregrado",
+      "periodo": "2026-II",
+      "alcance": "Procedimiento mediante el cual los estudiantes regulares de la FISI, a partir del segundo ciclo, solicitan anular su matrícula del semestre 2026-II y presentar conjuntamente una reserva para regularizar su situación académica.",
+      "ejemplos_de_consulta": [
+        "Quiero dejar de estudiar este semestre, ¿qué hago?",
+        "¿Puedo anular mi matrícula?",
+        "¿Cuál es la diferencia entre anular y reservar matrícula?",
+        "¿Cuánto cuesta reservar la matrícula?",
+        "¿Qué documentos debo presentar?",
+        "¿Puedo reservar matrícula si soy ingresante?",
+        "¿Por cuánto tiempo puedo reservar matrícula?",
+        "¿Hasta cuándo podía solicitar la anulación?",
+        "¿Qué pasa si quiero regresar a estudiar en 2027-I?"
+      ],
+      "requisitos": [
+        "Solicitud de anulación y reserva de matrícula mediante el formato oficial, presentada por el sistema MAT e indicando el motivo de la anulación.",
+        "Copia legible del DNI por ambas caras.",
+        "Reporte de matrícula correspondiente al semestre 2026-II.",
+        "Pago de S/ 67.00 mediante SAN MARKET por concepto de reserva de matrícula para alumno regular de pregrado.",
+        "Adjuntar la boleta de venta electrónica correspondiente al pago."
+      ],
+      "condiciones": [
+        "El comunicado está dirigido a estudiantes regulares de la FISI, desde el segundo ciclo en adelante.",
+        "La solicitud de anulación de matrícula 2026-II debe acompañarse de la solicitud de reserva de matrícula para el mismo semestre.",
+        "La reserva de matrícula debe estar debidamente fundamentada y acreditada.",
+        "La reserva de matrícula no puede superar tres años académicos, consecutivos o alternados.",
+        "La reserva de matrícula no procede para estudiantes ingresantes del ciclo I.",
+        "La presentación de la solicitud no constituye una aprobación automática.",
+        "Los plazos y montos corresponden al comunicado del semestre 2026-II y no deben extrapolarse a otros periodos."
+      ],
+      "pasos": [
+        "Descargar el formato oficial de solicitud de anulación y reserva de matrícula.",
+        "Completar la solicitud indicando el motivo de la anulación.",
+        "Preparar una copia legible del DNI por ambas caras.",
+        "Obtener el reporte de matrícula correspondiente al semestre 2026-II.",
+        "Realizar el pago de S/ 67.00 mediante SAN MARKET por concepto de reserva de matrícula para alumno regular de pregrado.",
+        "Obtener la boleta de venta electrónica del pago.",
+        "Presentar mediante el sistema MAT la solicitud y los documentos requeridos dentro del plazo comunicado."
+      ],
+      "casos_especificos": {
+        "anular_matricula": "Para el procedimiento comunicado por la FISI en 2026-II, el estudiante regular que solicita anulación debe presentar conjuntamente su solicitud de reserva de matrícula.",
+        "reservar_matricula": "La reserva permite solicitar la postergación de la matrícula, debidamente fundamentada y acreditada, conforme al cronograma y normativa aplicable.",
+        "estudiante_ingresante": "La reserva de matrícula no procede para estudiantes ingresantes del ciclo I, según el comunicado de la FISI.",
+        "duracion_maxima": "La reserva de matrícula no puede exceder tres años académicos consecutivos o alternados.",
+        "costo_reserva": "El comunicado para estudiantes regulares de pregrado 2026-II establece un pago de S/ 67.00 por reserva de matrícula mediante SAN MARKET.",
+        "reactualizacion_2027_1": "El comunicado indica que el estudiante que anuló su matrícula y posteriormente solicita la reactualización para 2027-I debe efectuar el pago correspondiente de S/ 191.00 mediante SAN MARKET.",
+        "plazo_vencido": "El plazo comunicado para 2026-II terminó el 26 de octubre de 2026 a las 17:00. El catálogo no confirma una ampliación.",
+        "solo_anulacion": "Para estudiantes regulares comprendidos en el comunicado de 2026-II, la FISI exige presentar conjuntamente la solicitud de anulación y la de reserva."
+      },
+      "canal_de_presentacion": "Sistema MAT",
+      "plazo": "Del viernes 23 al lunes 26 de octubre de 2026, hasta las 17:00 horas. Plazo indicado como impostergable en el comunicado de la FISI.",
+      "cronograma_general_unmsm": {
+        "proceso": "Anulación y reserva de matrícula 2026-II",
+        "inicio": "2026-10-23",
+        "fin": "2026-10-26",
+        "alcance": "Fechas específicas del comunicado FISI 2026-II; no corresponden a una verificación independiente del cronograma general de la UNMSM."
+      },
+      "fuentes": [
+        {
+          "titulo": "Comunicado: Anulación y reserva de matrícula - Semestre académico 2026-II",
+          "url": "https://sistemas.unmsm.edu.pe/site/slider/1907-comunicado-anulacion-y-reserva-de-matricula-semestre-academico-2026-ii"
         }
       ]
     }

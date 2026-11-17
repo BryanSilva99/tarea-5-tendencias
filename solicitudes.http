@@ -3,6 +3,26 @@
 ### Comprobar la API
 GET {{baseUrl}}/health
 
+### Consultar modelos permitidos
+GET {{baseUrl}}/modelo
+
+### Metadatos reproducibles del experimento
+GET {{baseUrl}}/experimento
+
+### Banco de evaluación y referencias para el revisor
+GET {{baseUrl}}/evaluacion
+
+### Iniciar conversación con Qwen3 cuantizado
+POST {{baseUrl}}/chat
+Content-Type: application/json
+
+{
+  "mensaje": "Quiero hacer una rectificación.",
+  "modelo": "qwen3:4b-q4_K_M",
+  "razonamiento": "desactivado",
+  "parametros": {"temperature": 0.2, "seed": 42, "num_ctx": 8192, "num_predict": 1024}
+}
+
 ### Iniciar conversación (ejecutar antes de la siguiente petición)
 # @name nuevaConversacion
 POST {{baseUrl}}/chat

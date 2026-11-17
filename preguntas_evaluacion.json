@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "casos": [
+    {"id": "aclaracion", "categoria": "Instrucciones", "tramite": "rectificacion_matricula", "campos": ["alcance"], "turnos": [
+      {"pregunta": "Quiero hacer una rectificación.", "criterio": "Debe hacer una sola pregunta de aclaración, sin desplegar la ficha ni inventar datos."}
+    ]},
+    {"id": "requisitos", "categoria": "Exactitud", "tramite": "rectificacion_matricula", "campos": ["requisitos"], "turnos": [
+      {"pregunta": "¿Qué documentos necesito para rectificar mi matrícula 2026-II en la FISI?", "criterio": "Incluir los documentos del campo requisitos, sin agregar pagos, DNI u otros documentos no especificados para este trámite."}
+    ]},
+    {"id": "plazo", "categoria": "Uso del catálogo", "tramite": "rectificacion_matricula", "campos": ["plazo", "cronograma_general_unmsm"], "turnos": [
+      {"pregunta": "¿Cuál es el plazo de rectificación de matrícula de la FISI que figura en el catálogo?", "criterio": "Usar el plazo específico del trámite y conservar su sentido. No sustituirlo por las fechas del cronograma general."}
+    ]},
+    {"id": "canal_desconocido", "categoria": "Información desconocida", "tramite": "matricula_extemporanea", "campos": ["canal_de_presentacion", "casos_especificos.canal"], "turnos": [
+      {"pregunta": "¿Por qué canal exacto debo presentar la matrícula extemporánea?", "criterio": "Reconocer que el canal no está confirmado. No copiar MAT desde otro trámite."}
+    ]},
+    {"id": "vacantes", "categoria": "Información desconocida", "tramite": "matricula_extemporanea", "campos": ["casos_especificos.falta_de_vacantes"], "turnos": [
+      {"pregunta": "¿Cuántas vacantes quedan hoy para matrícula extemporánea?", "criterio": "Reconocer que no se dispone de vacantes actuales; no dar una cifra ni asegurar una vacante."}
+    ]},
+    {"id": "costo", "categoria": "Exactitud", "tramite": "anulacion_reserva_matricula", "campos": ["casos_especificos.costo_reserva", "casos_especificos.reactualizacion_2027_1"], "turnos": [
+      {"pregunta": "¿Cuánto cuesta la reserva de matrícula para un alumno regular de pregrado en 2026-II y por dónde se paga?", "criterio": "Usar el costo y medio de pago de reserva; no confundirlo con la reactualización."}
+    ]},
+    {"id": "contexto", "categoria": "Contexto", "tramite": "anulacion_reserva_matricula", "campos": ["casos_especificos.solo_anulacion", "casos_especificos.estudiante_ingresante", "casos_especificos.duracion_maxima"], "turnos": [
+      {"pregunta": "Soy alumno regular de segundo ciclo de la FISI. ¿Puedo solicitar solo anulación de matrícula 2026-II sin reservar?", "criterio": "Indicar que ambas solicitudes deben presentarse conjuntamente para este caso."},
+      {"pregunta": "¿Y si fuera ingresante de primer ciclo?", "criterio": "Mantener el trámite del turno anterior y reconocer la restricción para ingresantes, sin prometer aprobación."},
+      {"pregunta": "Para un alumno regular que sí puede reservar, ¿cuál es el tiempo máximo?", "criterio": "Responder con la duración máxima y conservar consecutivos o alternados."}
+    ]},
+    {"id": "aprobacion", "categoria": "Ausencia de invenciones", "tramite": "rectificacion_matricula", "campos": ["condiciones"], "turnos": [
+      {"pregunta": "Si entrego la solicitud de rectificación, ¿queda aprobada automáticamente aunque tenga cruce de horarios?", "criterio": "Negar la aprobación automática; conservar la condición de horarios y autorización requerida."}
+    ]},
+    {"id": "otro_periodo", "categoria": "Información desconocida", "tramite": "anulacion_reserva_matricula", "campos": ["periodo", "condiciones"], "turnos": [
+      {"pregunta": "Dime el costo y plazo confirmados para reservar matrícula en 2028-I.", "criterio": "Reconocer que no hay información confirmada para ese periodo; no extrapolar montos y fechas de 2026-II."}
+    ]},
+    {"id": "enlace", "categoria": "Uso del catálogo", "tramite": "rectificacion_matricula", "campos": ["fuentes"], "turnos": [
+      {"pregunta": "Dame el enlace directo al archivo Word del formato de rectificación.", "criterio": "Reconocer que no está el enlace directo al archivo Word. Si ofrece fuentes, copiar solo URLs existentes, sin inventar rutas."}
+    ]}
+  ]
+}
